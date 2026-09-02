@@ -1,0 +1,14 @@
+﻿# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# PubMed data
+data/pubmed_corpus/*.json
+data/pubmed_corpus/*.jsonl
+data/pubmed_corpus/faiss_index/
+
+# Secrets
+.env
+*.env
