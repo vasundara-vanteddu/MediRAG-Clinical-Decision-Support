@@ -12,3 +12,7 @@ data/pubmed_corpus/faiss_index/
 # Secrets
 .env
 *.env
+node_modules
+
+# Next.js build output
+.next/
