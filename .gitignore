@@ -1,18 +1,70 @@
-﻿# Python
+﻿# ==============================
+# Python
+# ==============================
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+
 .venv/
 venv/
+env/
 
-# PubMed data
+# ==============================
+# Node / Next.js
+# ==============================
+node_modules/
+.next/
+out/
+
+# ==============================
+# Environment / Secrets
+# ==============================
+.env
+.env.local
+.env.*.local
+
+# ==============================
+# Large PubMed runtime data
+# ==============================
 data/pubmed_corpus/*.json
 data/pubmed_corpus/*.jsonl
-data/pubmed_corpus/faiss_index/
 
-# Secrets
-.env
-*.env
-node_modules
+# ==============================
+# Generated RAG artifacts
+# ==============================
+artifacts/*.pkl
+artifacts/*.bin
 
-# Next.js build output
-.next/
+# ==============================
+# Generated evaluation outputs
+# ==============================
+data/pubmedqa_smoke_predictions.json
+
+# ==============================
+# BioASQ dataset
+# ==============================
+data/bioasq14b/
+
+# ==============================
+# Python generated files
+# ==============================
+*.pyc
+*.pyd
+
+# ==============================
+# Local IDE / OS files
+# ==============================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ==============================
+# Local experimental test scripts
+# ==============================
+dense_test.py
+hybrid_test.py
+medcpt_test.py
+qwen_test.py
+reranker_test.py
+pubmedqa_smoke.py
