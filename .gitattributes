@@ -1,0 +1,4 @@
+artifacts/faiss_index.bin filter=lfs diff=lfs merge=lfs -text
+artifacts/bm25_index.pkl filter=lfs diff=lfs merge=lfs -text
+data/bioasq14b/BioASQ-training14b/training14b.json filter=lfs diff=lfs merge=lfs -text
+data/pubmed_corpus/pubmed_abstracts_final.json filter=lfs diff=lfs merge=lfs -text

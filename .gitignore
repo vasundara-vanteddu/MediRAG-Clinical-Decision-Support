@@ -1,4 +1,4 @@
-﻿# ==============================
+# ==============================
 # Python
 # ==============================
 __pycache__/
@@ -26,14 +26,10 @@ out/
 # ==============================
 # Large PubMed runtime data
 # ==============================
-data/pubmed_corpus/*.json
-data/pubmed_corpus/*.jsonl
 
 # ==============================
 # Generated RAG artifacts
 # ==============================
-artifacts/*.pkl
-artifacts/*.bin
 
 # ==============================
 # Generated evaluation outputs
@@ -43,7 +39,6 @@ data/pubmedqa_smoke_predictions.json
 # ==============================
 # BioASQ dataset
 # ==============================
-data/bioasq14b/
 
 # ==============================
 # Python generated files
@@ -68,3 +63,11 @@ medcpt_test.py
 qwen_test.py
 reranker_test.py
 pubmedqa_smoke.py
+.env
+.env.*
+!.env.example
+node_modules/
+.venv/
+.next/
+__pycache__/
+
