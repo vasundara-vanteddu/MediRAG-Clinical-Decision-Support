@@ -69,6 +69,7 @@ export function ClinicalWorkspace() {
   const [activeStage, setActiveStage] = useState(-1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [copied, setCopied] = useState(false)
 
@@ -88,7 +89,7 @@ export function ClinicalWorkspace() {
         setPatientError(false)
 
         const apiUrl =
-          process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
+          process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8000'
 
         const response = await fetch(
           `${apiUrl}/patients/${encodeURIComponent(patientId)}`
@@ -126,6 +127,7 @@ export function ClinicalWorkspace() {
     if (!query.trim() || isSubmitting) return
 
     setError(false)
+    setErrorMessage('')
     setResponse(null)
     setIsSubmitting(true)
     setActiveStage(0)
@@ -144,9 +146,12 @@ export function ClinicalWorkspace() {
       window.clearInterval(timer)
       setActiveStage(stages.length)
       setResponse(result)
-    } catch {
+    } catch (err: unknown) {
       window.clearInterval(timer)
       setError(true)
+      setErrorMessage(
+        err instanceof Error ? err.message : 'The evidence service did not respond.'
+      )
       setActiveStage(-1)
     } finally {
       setIsSubmitting(false)
@@ -167,6 +172,7 @@ export function ClinicalWorkspace() {
     setQuery('')
     setResponse(null)
     setError(false)
+    setErrorMessage('')
     setActiveStage(-1)
     setCopied(false)
     setDrawerOpen(false)
@@ -531,8 +537,8 @@ export function ClinicalWorkspace() {
                     </div>
 
                     <p className="mt-2 text-sm text-muted-foreground">
-                      The evidence service did not respond. Check the
-                      connection and try again.
+                      {errorMessage ||
+                        'The evidence service did not respond. Check the connection and try again.'}
                     </p>
 
                     <button
@@ -736,12 +742,12 @@ function EvidenceDrawer({
   }, [onClose, open])
 
   const records =
-    response?.citations.map((citation) => ({
-      rank: citation.rank,
+    response?.citations.map((citation, index) => ({
+      rank: citation.rank ?? index + 1,
       title: citation.title,
       pmid: citation.pmid,
       abstract: citation.abstract,
-      score: citation.score,
+      score: citation.score ?? 0,
     })) ?? []
 
   return (

@@ -4,13 +4,14 @@ import type {
 } from '@/src/types/api'
 
 const apiUrl =
-  process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
+  process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8000'
 
 export async function submitClinicalQuery(
   query: string
 ): Promise<QueryResponse> {
   const request: QueryRequest = {
     question: query,
+    query: query,
   }
 
   const response = await fetch(`${apiUrl}/query`, {
@@ -22,8 +23,9 @@ export async function submitClinicalQuery(
   })
 
   if (!response.ok) {
+    const errorText = await response.text().catch(() => '')
     throw new Error(
-      `MediSphere API request failed: ${response.status}`
+      `MediSphere API request failed: ${response.status} ${errorText}`.trim()
     )
   }
 

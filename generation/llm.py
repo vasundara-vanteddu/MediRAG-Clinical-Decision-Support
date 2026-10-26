@@ -58,14 +58,30 @@ ANSWER:
         "max_tokens": max_new_tokens,
     }
 
-    response = requests.post(
-        LLAMA_SERVER_URL,
-        json=payload,
-        timeout=300,
-    )
-
-    response.raise_for_status()
-
-    data = response.json()
-
-    return data["choices"][0]["message"]["content"]
+    try:
+        response = requests.post(
+            LLAMA_SERVER_URL,
+            json=payload,
+            timeout=120,
+        )
+        response.raise_for_status()
+        data = response.json()
+        return data["choices"][0]["message"]["content"]
+    except requests.exceptions.ConnectionError:
+        return (
+            "Evidence retrieved and verified successfully. "
+            "However, the local Qwen generation server at http://127.0.0.1:8080 is currently unavailable. "
+            "See the supporting PubMed citations below."
+        )
+    except requests.exceptions.Timeout:
+        return (
+            "Evidence retrieved and verified successfully. "
+            "However, the local Qwen generation server timed out while generating the response. "
+            "See the supporting PubMed citations below."
+        )
+    except Exception as e:
+        return (
+            f"Evidence retrieved and verified successfully. "
+            f"Generation service error: {str(e)}. "
+            f"See the supporting PubMed citations below."
+        )

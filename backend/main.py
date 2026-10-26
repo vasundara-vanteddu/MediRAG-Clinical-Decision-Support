@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from typing import Optional
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -11,7 +12,8 @@ from patient_data.patient_repository import (
 )
 
 class QueryRequest(BaseModel):
-    question: str
+    question: Optional[str] = None
+    query: Optional[str] = None
 
 
 def create_app(pipeline: MediRAGPipeline):
@@ -24,15 +26,18 @@ def create_app(pipeline: MediRAGPipeline):
         version="1.0.0"
     )
     app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+        CORSMiddleware,
+        allow_origins=[
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            "http://localhost:8000",
+            "http://127.0.0.1:8000",
+        ],
+        allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     @app.get("/")
     def root():
@@ -64,6 +69,12 @@ def create_app(pipeline: MediRAGPipeline):
 
     @app.post("/query")
     def query_medical_information(request: QueryRequest):
-        return pipeline.query(request.question)
+        prompt = request.question or request.query
+        if not prompt or not prompt.strip():
+            raise HTTPException(
+                status_code=400,
+                detail="Either 'question' or 'query' must be provided."
+            )
+        return pipeline.query(prompt.strip())
 
     return app

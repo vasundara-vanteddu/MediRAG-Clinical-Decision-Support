@@ -2,8 +2,8 @@ export interface Citation {
   pmid: string
   title: string
   abstract: string
-  score: number
-  rank: number
+  score?: number
+  rank?: number
 }
 
 export interface QueryResponse {
@@ -13,5 +13,6 @@ export interface QueryResponse {
 }
 
 export interface QueryRequest {
-  query: string
+  question?: string
+  query?: string
 }

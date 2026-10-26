@@ -48,7 +48,7 @@ export function SiteHeader() {
   )
 }
 
-export function PageShell({ children }: { children: React.ReactNode }) {
+export function PageShell({ children }: { children?: React.ReactNode }) {
   return <><SiteHeader />{children}</>
 }
 
